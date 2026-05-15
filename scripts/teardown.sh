@@ -1,0 +1,80 @@
+#!/bin/bash
+# teardown.sh — Remove all Riptide artifacts from a target project
+# Usage: teardown.sh {target-project-path}
+# Leaves all project source code untouched.
+
+set -euo pipefail
+
+# --- Validate arguments ---
+if [ -z "${1:-}" ]; then
+  echo "Usage: teardown.sh <target-project-path>"
+  echo "Error: target project path is required."
+  exit 1
+fi
+
+TARGET="$(cd "$1" 2>/dev/null && pwd)" || {
+  echo "Error: target path '$1' does not exist or is not a directory."
+  exit 1
+}
+
+echo "Removing Riptide artifacts from: $TARGET"
+
+# --- Remove .claude/ directory ---
+if [ -d "$TARGET/.claude" ]; then
+  rm -rf "$TARGET/.claude"
+  echo "  ✓ Removed .claude/"
+else
+  echo "  - .claude/ not found (skipped)"
+fi
+
+# --- Remove CLAUDE.md ---
+if [ -f "$TARGET/CLAUDE.md" ]; then
+  rm -f "$TARGET/CLAUDE.md"
+  echo "  ✓ Removed CLAUDE.md"
+else
+  echo "  - CLAUDE.md not found (skipped)"
+fi
+
+# --- Remove .riptide/ directory ---
+if [ -d "$TARGET/.riptide" ]; then
+  rm -rf "$TARGET/.riptide"
+  echo "  ✓ Removed .riptide/"
+else
+  echo "  - .riptide/ not found (skipped)"
+fi
+
+# --- Remove docs/TECH_SPEC.md ---
+if [ -f "$TARGET/docs/TECH_SPEC.md" ]; then
+  rm -f "$TARGET/docs/TECH_SPEC.md"
+  echo "  ✓ Removed docs/TECH_SPEC.md"
+else
+  echo "  - docs/TECH_SPEC.md not found (skipped)"
+fi
+
+# --- Remove docs/MODULE_MAP.md ---
+if [ -f "$TARGET/docs/MODULE_MAP.md" ]; then
+  rm -f "$TARGET/docs/MODULE_MAP.md"
+  echo "  ✓ Removed docs/MODULE_MAP.md"
+else
+  echo "  - docs/MODULE_MAP.md not found (skipped)"
+fi
+
+# --- Remove docs/solutions/ ---
+if [ -d "$TARGET/docs/solutions" ]; then
+  rm -rf "$TARGET/docs/solutions"
+  echo "  ✓ Removed docs/solutions/"
+else
+  echo "  - docs/solutions/ not found (skipped)"
+fi
+
+# --- Remove dashboard/ ---
+if [ -d "$TARGET/dashboard" ]; then
+  rm -rf "$TARGET/dashboard"
+  echo "  ✓ Removed dashboard/"
+else
+  echo "  - dashboard/ not found (skipped)"
+fi
+
+echo ""
+echo "Done. Riptide artifacts removed from $TARGET"
+echo "Project source code is untouched."

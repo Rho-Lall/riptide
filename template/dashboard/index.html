@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Riptide Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:#DDBF7E;
+  min-height:100vh;
+  padding:20px;
+  overflow:clip;
+}
+.dashboard{
+  max-width:1440px;
+  height:calc(100vh - 40px);
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+/* Header */
+.header{
+  height:64px;
+  min-height:64px;
+  width:100%;
+  background:#FFFFFF30;
+  border:1px solid #FFFFFFA0;
+  border-radius:12px;
+  box-shadow:0 6px 20px #5C3A001A;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 20px;
+}
+.header-title{
+  font-size:20px;
+  font-weight:700;
+  color:#2D1B00;
+}
+.header-tide-name{
+  font-size:13px;
+  font-weight:400;
+  color:#5C3D1E;
+}
+.header-spacer{flex:1}
+.header-progress{
+  font-size:13px;
+  font-weight:400;
+  color:#5C3D1E;
+}
+
+/* Content area */
+.content{
+  display:flex;
+  gap:16px;
+  flex:1;
+  min-height:0;
+}
+
+/* Main panel */
+.main-panel{
+  flex:1;
+  background:#FFFFFF28;
+  border:1px solid #FFFFFF70;
+  border-radius:16px;
+  box-shadow:0 8px 28px #5C3A0018;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  padding:20px;
+  min-height:0;
+}
+.section-label{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:2px;
+  color:#8B5E2A;
+  text-transform:uppercase;
+}
+.tide-title{
+  font-size:16px;
+  font-weight:600;
+  color:#2D1B00;
+}
+.waves-row{
+  display:flex;
+  gap:12px;
+  flex:1;
+  min-height:0;
+}
+
+/* Wave cards */
+.wave-card{
+  flex:1;
+  background:#FFFFFF38;
+  border:1px solid #FFFFFFA0;
+  border-radius:12px;
+  box-shadow:0 4px 14px #5C3A0015;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  padding:16px;
+  overflow-y:auto;
+}
+.wave-card.pending{
+  background:#FFFFFF22;
+  border-color:#FFFFFF60;
+}
+.wave-label{
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+.wave-label.active{color:#F59E0B}
+.wave-label.pending{color:#9CA3AF}
+.wave-label.planning{color:#3B82F6}
+.wave-label.reviewing{color:#A855F7}
+.wave-label.complete{color:#10B981}
+.wave-label.frozen{color:#EF4444}
+.wave-module{
+  font-size:14px;
+  font-weight:600;
+  color:#2D1B00;
+}
+.wave-module.pending{color:#5C3D1E}
+.wave-status{
+  font-size:12px;
+  font-weight:400;
+  color:#5C3D1E;
+}
+.wave-status.pending{color:#9CA3AF}
+
+/* Task list inside wave cards */
+.wave-tasks{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  margin-top:4px;
+}
+.wave-task{
+  font-size:11px;
+  color:#5C3D1E;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.wave-task-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  flex-shrink:0;
+}
+
+/* Right sidebar */
+.sidebar{
+  width:300px;
+  min-width:300px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  min-height:0;
+}
+.sidebar-card{
+  background:#FFFFFF28;
+  border:1px solid #FFFFFF70;
+  border-radius:16px;
+  box-shadow:0 8px 28px #5C3A0018;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  padding:16px;
+}
+.sidebar-card.grow{
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+}
+.sidebar-label{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+.sidebar-label.on-deck{color:#3B82F6}
+.sidebar-label.completed{color:#10B981}
+.sidebar-label.backlog{color:#8B5E2A}
+.sidebar-title{
+  font-size:14px;
+  font-weight:600;
+  color:#2D1B00;
+}
+.sidebar-subtitle{
+  font-size:12px;
+  font-weight:400;
+  color:#5C3D1E;
+}
+.sidebar-list{
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.sidebar-list li{
+  font-size:12px;
+  font-weight:400;
+  color:#5C3D1E;
+}
+
+/* Frozen banner */
+.frozen-banner{
+  background:#FEE2E2;
+  border:1px solid #EF4444;
+  border-radius:12px;
+  padding:12px 20px;
+  color:#EF4444;
+  font-size:13px;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* No tide state */
+.no-tide{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  color:#5C3D1E;
+  background:#FFFFFF28;
+  border:1px solid #FFFFFF70;
+  border-radius:16px;
+}
+</style>
+</head>
+<body>
+<div id="app" class="dashboard"><div class="no-tide">Loading...</div></div>
+<script>
+(function(){
+const STATUS_PATH='../.riptide/status.json';
+const POLL_MS=2500;
+const app=document.getElementById('app');
+
+function esc(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function waveStatusClass(status){
+  const map={
+    building:'active',in_progress:'active',
+    planning:'planning',reviewing:'reviewing',
+    complete:'complete',frozen:'frozen'
+  };
+  return map[status]||'pending';
+}
+
+function statusColor(status){
+  const map={
+    building:'#F59E0B',in_progress:'#F59E0B',
+    planning:'#3B82F6',reviewing:'#A855F7',
+    complete:'#10B981',frozen:'#EF4444'
+  };
+  return map[status]||'#9CA3AF';
+}
+
+function getWaveStatus(wave){
+  const tasks=wave.tasks||[];
+  if(!tasks.length)return 'pending';
+  if(tasks.some(t=>t.status==='frozen'))return 'frozen';
+  if(tasks.every(t=>t.status==='complete'))return 'complete';
+  if(tasks.some(t=>t.status==='building'||t.status==='in_progress'))return 'building';
+  if(tasks.some(t=>t.status==='reviewing'))return 'reviewing';
+  if(tasks.some(t=>t.status==='planning'))return 'planning';
+  return 'pending';
+}
+
+function categorizeWaves(waves){
+  const inProgress=[];
+  const onDeck=[];
+  const completed=[];
+  const backlog=[];
+
+  for(const w of waves){
+    const status=getWaveStatus(w);
+    if(status==='complete')completed.push(w);
+    else if(status==='building'||status==='in_progress'||status==='reviewing'||status==='frozen')inProgress.push(w);
+    else if(status==='planning')onDeck.push(w);
+    else backlog.push(w);
+  }
+  return {inProgress,onDeck,completed,backlog};
+}
+
+function render(data){
+  if(!data||!data.tide){
+    app.innerHTML='<div class="no-tide">No active tide</div>';
+    app.className='dashboard';
+    return;
+  }
+
+  const waves=data.waves||[];
+  const frozen=data.frozen||[];
+  const allTasks=waves.flatMap(w=>w.tasks||[]);
+  const done=allTasks.filter(t=>t.status==='complete').length;
+  const total=allTasks.length;
+  const {inProgress,onDeck,completed,backlog}=categorizeWaves(waves);
+
+  let html='';
+
+  // Header
+  html+='<div class="header">';
+  html+='<span class="header-title">Riptide</span>';
+  html+='<span class="header-tide-name">'+esc(data.tide)+'</span>';
+  html+='<span class="header-spacer"></span>';
+  html+='<span class="header-progress">'+done+' / '+total+' tasks complete</span>';
+  html+='</div>';
+
+  // Frozen banner
+  if(frozen.length){
+    for(const f of frozen){
+      const msg=typeof f==='string'?f:(f.reason||JSON.stringify(f));
+      html+='<div class="frozen-banner"><span>⚠</span><span>FROZEN: '+esc(msg)+'</span></div>';
+    }
+  }
+  const frozenTasks=allTasks.filter(t=>t.status==='frozen');
+  if(frozenTasks.length&&!frozen.length){
+    html+='<div class="frozen-banner"><span>⚠</span><span>'+frozenTasks.length+' task(s) frozen</span></div>';
+  }
+
+  // Content area
+  html+='<div class="content">';
+
+  // Main panel - In Progress
+  html+='<div class="main-panel">';
+  html+='<span class="section-label">IN PROGRESS</span>';
+  html+='<span class="tide-title">'+esc(data.tide)+'</span>';
+  html+='<div class="waves-row">';
+
+  if(inProgress.length){
+    for(const w of inProgress){
+      const ws=getWaveStatus(w);
+      const cls=waveStatusClass(ws);
+      const isPending=cls==='pending';
+      html+='<div class="wave-card'+(isPending?' pending':'')+'">';
+      html+='<span class="wave-label '+cls+'">'+esc(w.name||w.id)+'</span>';
+      const tasks=w.tasks||[];
+      const activeTask=tasks.find(t=>t.status==='building'||t.status==='in_progress'||t.status==='reviewing');
+      html+='<span class="wave-module'+(isPending?' pending':'')+'">'+esc(activeTask?activeTask.title||activeTask.id:w.name||w.id)+'</span>';
+      html+='<span class="wave-status'+(isPending?' pending':'')+'">'+esc(ws)+'</span>';
+      if(tasks.length){
+        html+='<div class="wave-tasks">';
+        for(const t of tasks){
+          html+='<div class="wave-task"><span class="wave-task-dot" style="background:'+statusColor(t.status)+'"></span><span>'+esc(t.title||t.id)+'</span></div>';
+        }
+        html+='</div>';
+      }
+      html+='</div>';
+    }
+  } else {
+    // Show all waves if none are specifically in progress
+    for(const w of waves){
+      const ws=getWaveStatus(w);
+      const cls=waveStatusClass(ws);
+      const isPending=cls==='pending';
+      html+='<div class="wave-card'+(isPending?' pending':'')+'">';
+      html+='<span class="wave-label '+cls+'">'+esc(w.name||w.id)+'</span>';
+      const tasks=w.tasks||[];
+      const activeTask=tasks.find(t=>t.status!=='complete'&&t.status!=='pending');
+      html+='<span class="wave-module'+(isPending?' pending':'')+'">'+esc(activeTask?activeTask.title||activeTask.id:w.name||w.id)+'</span>';
+      html+='<span class="wave-status'+(isPending?' pending':'')+'">'+esc(ws)+'</span>';
+      if(tasks.length){
+        html+='<div class="wave-tasks">';
+        for(const t of tasks){
+          html+='<div class="wave-task"><span class="wave-task-dot" style="background:'+statusColor(t.status)+'"></span><span>'+esc(t.title||t.id)+'</span></div>';
+        }
+        html+='</div>';
+      }
+      html+='</div>';
+    }
+  }
+
+  html+='</div>'; // waves-row
+  html+='</div>'; // main-panel
+
+  // Right sidebar
+  html+='<div class="sidebar">';
+
+  // On Deck card
+  html+='<div class="sidebar-card">';
+  html+='<span class="sidebar-label on-deck">ON DECK</span>';
+  if(onDeck.length){
+    html+='<span class="sidebar-title">'+esc(onDeck[0].name||onDeck[0].id)+'</span>';
+    const nextTask=(onDeck[0].tasks||[])[0];
+    html+='<span class="sidebar-subtitle">'+esc(nextTask?nextTask.title||nextTask.id:'Planning')+'</span>';
+  } else {
+    html+='<span class="sidebar-title">Nothing queued</span>';
+    html+='<span class="sidebar-subtitle">All waves active or complete</span>';
+  }
+  html+='</div>';
+
+  // Completed card
+  html+='<div class="sidebar-card">';
+  html+='<span class="sidebar-label completed">COMPLETED</span>';
+  html+='<span class="sidebar-title">'+completed.length+' wave'+(completed.length!==1?'s':'')+' done</span>';
+  if(completed.length){
+    html+='<span class="sidebar-subtitle">'+esc(completed.map(w=>w.name||w.id).join(', '))+'</span>';
+  } else {
+    html+='<span class="sidebar-subtitle">No waves completed yet</span>';
+  }
+  html+='</div>';
+
+  // Backlog card
+  html+='<div class="sidebar-card grow">';
+  html+='<span class="sidebar-label backlog">BACKLOG</span>';
+  html+='<span class="sidebar-title">'+backlog.length+' wave'+(backlog.length!==1?'s':'')+' pending</span>';
+  if(backlog.length){
+    html+='<ul class="sidebar-list">';
+    for(const w of backlog){
+      html+='<li>'+esc(w.name||w.id)+'</li>';
+    }
+    html+='</ul>';
+  }
+  html+='</div>';
+
+  html+='</div>'; // sidebar
+  html+='</div>'; // content
+
+  app.innerHTML=html;
+  app.className='dashboard';
+}
+
+async function poll(){
+  try{
+    const r=await fetch(STATUS_PATH+'?t='+Date.now());
+    if(!r.ok)throw new Error(r.status);
+    const data=await r.json();
+    render(data);
+  }catch(e){
+    render(null);
+  }
+}
+
+poll();
+setInterval(poll,POLL_MS);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+#!/bin/bash
+# riptide — CLI entry point for the Riptide orchestration framework
+# Usage: riptide <command>
+# Run from within your target project directory.
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+usage() {
+  echo "Usage: riptide <command>"
+  echo ""
+  echo "Run from within your target project directory."
+  echo ""
+  echo "Commands:"
+  echo "  bootstrap    Deploy Riptide into the current directory"
+  echo "  teardown     Remove Riptide from the current directory"
+  echo "  dashboard    Start the localhost status dashboard"
+  echo ""
+  echo "Examples:"
+  echo "  cd ~/projects/my-app"
+  echo "  riptide bootstrap"
+  echo "  riptide dashboard"
+}
+
+if [ -z "${1:-}" ]; then
+  usage
+  exit 1
+fi
+
+COMMAND="$1"
+shift
+
+case "$COMMAND" in
+  bootstrap)
+    exec "$SCRIPT_DIR/scripts/bootstrap.sh" "$(pwd)"
+    ;;
+  teardown)
+    exec "$SCRIPT_DIR/scripts/teardown.sh" "$(pwd)"
+    ;;
+  dashboard)
+    exec "$SCRIPT_DIR/scripts/dashboard.sh" "$(pwd)"
+    ;;
+  help|--help|-h)
+    usage
+    exit 0
+    ;;
+  *)
+    echo "Error: unknown command '$COMMAND'"
+    echo ""
+    usage
+    exit 1
+    ;;
+esac
