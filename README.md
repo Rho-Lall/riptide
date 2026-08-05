@@ -15,6 +15,22 @@ Kiro handles planning and decomposition. Claude Code terminals handle execution.
 
 Waves within a tide run simultaneously with zero cross-wave dependencies. Dependencies only exist within a wave (serial task ordering). Tides are sequential milestones.
 
+## Single-Repo vs. Multi-Repo
+
+`bootstrap.sh` detects which mode applies and records it in `.riptide/status.json`'s `mode`
+field:
+
+- **single-repo** — the target is itself a git working tree. Waves get worktree isolation
+  (`git worktree add .worktrees/wave-x`); MODULE_MAP.md owns bare path globs.
+- **multi-repo** — the target is a workspace containing several independent repos (or isn't a
+  git repo at all — e.g. a folder of unrelated projects). There's no single `.git` to branch
+  from, so waves don't get worktree isolation; instead each wave's terminal `cd`s into
+  whichever repo(s) it owns and branches normally there. MODULE_MAP.md owns
+  `{repo}/{path-glob}` entries so ownership stays unambiguous across repo boundaries.
+
+Deploy at whichever root makes sense for your project — a single repo, or the parent folder
+of several. See `docs/MODULE_MAP.md` for the format each mode expects.
+
 ## Quick Start
 
 ```bash

@@ -1,8 +1,11 @@
 # CLAUDE.md
 
 ## Rules
+0. Check `.riptide/status.json`'s `mode` field (`single-repo` or `multi-repo`) before touching
+   MODULE_MAP.md — it tells you which wave format (worktree vs. repo-scoped) applies.
 1. Read task plan before starting work.
-2. Stay within module boundary (MODULE_MAP.md).
+2. Stay within module boundary (MODULE_MAP.md). In multi-repo mode, "boundary" includes the
+   repo, not just the path — a glob owned in `repo-a` says nothing about `repo-b`.
 3. Logic: test first. Declarative: write directly.
 4. Atomic commits, one concern each.
 5. 3 failures same test → FREEZE, update status, stop.
