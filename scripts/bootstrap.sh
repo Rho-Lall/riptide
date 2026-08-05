@@ -44,7 +44,11 @@ echo "  Detected mode: $MODE"
 
 # --- Copy template contents (preserving directory structure) ---
 # Uses cp -R without -P (no symlinks). Overwrites existing files (idempotent).
-cp -R "$TEMPLATE_DIR"/ "$TARGET"/
+# NOTE: the trailing "/." on the source is load-bearing — "cp -R src/ dst/" (no dot) copies
+# src ITSELF into dst as a new subdirectory (dst/src/...) whenever dst already exists, on at
+# least some cp implementations (confirmed on MSYS/git-bash). "cp -R src/. dst/" copies the
+# CONTENTS of src into dst and correctly overwrites same-named existing files.
+cp -R "$TEMPLATE_DIR"/. "$TARGET"/
 
 echo "  ✓ Template files copied"
 
