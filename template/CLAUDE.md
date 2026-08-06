@@ -19,7 +19,9 @@
 CLAUDE.md → TECH_SPEC.md → MODULE_MAP.md → docs/solutions/ → .riptide/plans/{task-id}.md
 
 ## Roles
-/plan — read-only research, output to .riptide/plans/
+Planning happens upfront via Claude's native Plan Mode (see the `plan-ticket` skill) — there
+is no `/plan` command. A task must have an approved plan at .riptide/plans/{task-id}.md
+before /build runs.
 /build — implement from plan (TDD logic, direct declarative)
 /review — code review, findings to plan file
 /compound — capture patterns/gotchas

@@ -2,7 +2,10 @@
 
 A lean orchestration framework for one human directing 6–30 concurrent Claude Code agents through structured waves. Replaces SunForge (70KB+) with a focused tool under 15KB.
 
-Kiro handles planning and decomposition. Claude Code terminals handle execution. A localhost dashboard provides visibility.
+You decompose a milestone into tides and waves yourself (in conversation with Claude, not via
+an automated planning agent) and write MODULE_MAP.md. Per-task implementation planning happens
+upfront via Claude's native Plan Mode — see the `plan-ticket` skill — before `/sprint` ever
+runs. Claude Code terminals handle execution. A localhost dashboard provides visibility.
 
 ## Key Concepts
 
@@ -46,7 +49,9 @@ riptide dashboard
 /sprint TASK-1 TASK-2 TASK-3
 ```
 
-Each terminal runs its wave autonomously: plan → build → review → compound for each task in serial order.
+Each terminal runs its wave autonomously: build → review → compound for each task in serial
+order. Planning already happened upfront (native Plan Mode, via `plan-ticket`) — a task with
+no plan at `.riptide/plans/{task-id}.md` makes `/build` stop and tell you.
 
 ## Commands
 
@@ -54,7 +59,6 @@ Deployed into your project's `.claude/commands/`:
 
 | Command | Purpose |
 |---------|---------|
-| `/plan {TASK-ID}` | Read-only research + structured plan output |
 | `/build {TASK-ID}` | Implement from plan (TDD for logic, direct for declarative) |
 | `/sprint {TASK-IDs}` | Batch process tasks in serial order within a wave |
 | `/review` | Multi-perspective code review |
@@ -77,13 +81,13 @@ Running `bootstrap.sh` copies the following into your project:
 ```
 CLAUDE.md                          # Shared agent rules (<1KB)
 .claude/
-├── agents/                        # Planner, Builder, Tester, Debugger
-├── commands/                      # /plan, /build, /sprint, /review, /compound
+├── agents/                        # Builder, Tester, Debugger
+├── commands/                      # /build, /sprint, /review, /compound
 ├── hooks/                         # Kill switch, module boundary, git safety
 └── settings.json                  # Hook registration
 .riptide/
 ├── status.json                    # Tide/wave/task status (dashboard reads this)
-└── plans/                         # Task plans (planner writes, builder reads)
+└── plans/                         # Task plans (written via native Plan Mode, builder reads)
 docs/
 ├── TECH_SPEC.md                   # Template — filled before waves start
 ├── MODULE_MAP.md                  # File ownership per wave
@@ -111,22 +115,23 @@ On any freeze: all work stops, status updates to FROZEN, agent waits for human i
 | Dimension | SunForge | Riptide |
 |-----------|----------|---------|
 | Context per agent | ~70KB | <5KB |
-| Agent count | 5 (incl. Facilitator) | 4 (Kiro replaces Facilitator) |
+| Agent count | 5 (incl. Facilitator) | 3 (Builder, Tester, Debugger — no Planner or Facilitator) |
 | TDD enforcement | Every file (hook blocks) | Logic code only |
 | Team coordination | 4-person webhook signals | None (one person) |
 | Acceptance criteria | Gherkin (formal) | Plain English |
 | File conflict prevention | REGISTRY.json (dynamic) | MODULE_MAP.md (static per tide) |
 | Knowledge compounding | Full docs + ADRs | Patterns + gotchas only (<15 lines) |
-| Planning overhead | Interview → PRD → Spec → Issues | Kiro produces issues directly |
+| Planning overhead | Interview → PRD → Spec → Issues | You decompose into tides/waves directly; per-task plans via native Plan Mode |
 | Framework docs | 70KB+ | <15KB total |
 
 ## How a Tide Runs
 
-1. **Kiro** decomposes a milestone into tasks, groups them into waves, generates MODULE_MAP.md
-2. **You** open one Claude Code terminal per wave, run `/sprint {TASK-IDs}`
-3. **Each terminal** autonomously: plans, builds, reviews, compounds — task by task
-4. **Dashboard** shows real-time status across all waves
-5. **You** review PRs when waves complete, merge, kick off next tide
+1. **You** decompose a milestone into tasks, group them into waves, write MODULE_MAP.md
+2. **You** plan each task upfront via native Plan Mode (`plan-ticket` skill) — approved plans land at `.riptide/plans/{task-id}.md`
+3. **You** open one Claude Code terminal per wave, run `/sprint {TASK-IDs}`
+4. **Each terminal** autonomously: builds, reviews, compounds — task by task
+5. **Dashboard** shows real-time status across all waves
+6. **You** review PRs when waves complete, merge, kick off next tide
 
 ## License
 
