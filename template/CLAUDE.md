@@ -32,3 +32,11 @@ Types: feat|fix|test|refactor|docs|chore
 
 ## Status
 Write .riptide/status.json: start→planning/building/reviewing, done→complete, freeze→frozen+reason
+
+## Worktrees
+Ticket work happens in a git worktree at `.worktrees/{TICKET-ID}` relative to this repo's
+root, created by the orchestrator session (a separate Claude session with git ability — git
+actions are locked down here). If you're working on a specific ticket, `cd` into
+`.worktrees/{TICKET-ID}` first — don't work from the main checkout. If that worktree doesn't
+exist yet, tell the human/orchestrator to create one rather than attempting `git worktree`
+yourself.
