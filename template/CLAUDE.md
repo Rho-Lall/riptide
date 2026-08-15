@@ -2,10 +2,10 @@
 
 ## Rules
 0. Check `.riptide/status.json`'s `mode` field (`single-repo` or `multi-repo`) before touching
-   MODULE_MAP.md — it tells you which wave format (worktree vs. repo-scoped) applies.
+   CHANNELS.md — it tells you which wave format (worktree vs. repo-scoped) applies.
 1. Read task plan before starting work.
-2. Stay within module boundary (MODULE_MAP.md). In multi-repo mode, "boundary" includes the
-   repo, not just the path — a glob owned in `repo-a` says nothing about `repo-b`.
+2. Stay in your channel (CHANNELS.md). In multi-repo mode, a channel includes the repo, not
+   just the path — a glob owned in `repo-a` says nothing about `repo-b`.
 3. Logic: test first. Declarative: write directly.
 4. Atomic commits, one concern each.
 5. 3 failures same test → FREEZE, update status, stop.
@@ -16,14 +16,16 @@
 10. Update .riptide/status.json on transitions.
 
 ## Context Order
-CLAUDE.md → TECH_SPEC.md → MODULE_MAP.md → docs/solutions/ → .riptide/plans/{task-id}.md
+CLAUDE.md → TECH_SPEC.md → BAR.md → CHANNELS.md → docs/solutions/ → .riptide/plans/{wave-id}.md
 
 ## Roles
-Planning happens upfront via Claude's native Plan Mode (see the `plan-ticket` skill) — there
-is no `/plan` command. A task must have an approved plan at .riptide/plans/{task-id}.md
-before /build runs.
+/plan-sprint — triage a ticket set into waves (orchestrator terminal, upfront)
+plan-ticket skill — produce a wave's plan in native Plan Mode, human approves. No /plan command.
+A wave must have an approved plan at .riptide/plans/{wave-id}.md before /build runs — approved
+means the plan carries an `**Approved**:` line. Never write that line yourself.
+/surf — run one wave: plan, build each ticket, then gauntlet at the end
 /build — implement from plan (TDD logic, direct declarative)
-/review — code review, findings to plan file
+/gauntlet — blind critics score the wave against docs/BAR.md, iterate to threshold (wave end)
 /compound — capture patterns/gotchas
 
 ## Commits

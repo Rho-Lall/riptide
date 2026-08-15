@@ -2,7 +2,11 @@
 
 ## Introduction
 
-Riptide is a lean orchestration framework for one human directing 6-30 concurrent Claude Code agents through structured waves. It replaces SunForge (a 70KB+ hackathon framework) with a focused tool under 15KB. Kiro handles planning and decomposition. Claude Code terminals handle execution. Linear is the coordination bus.
+Riptide is a lean orchestration framework for one human directing 6-30 concurrent Claude Code agents through structured waves.  
+
+Claude Code terminals handle execution. 
+
+Linear is the coordination bus.
 
 ## Glossary
 
@@ -171,3 +175,4 @@ Riptide is a lean orchestration framework for one human directing 6-30 concurren
 4. THE CLAUDE_MD SHALL define the kill switch rules (3 failures or 10 minutes stuck)
 5. THE CLAUDE_MD SHALL instruct agents to check docs/solutions/ for relevant patterns before implementing
 6. THE CLAUDE_MD SHALL instruct agents to capture new patterns or gotchas in docs/solutions/ after completing a task
+

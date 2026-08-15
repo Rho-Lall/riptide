@@ -1,8 +1,8 @@
 #!/bin/bash
-# module-boundary.sh
+# cross-channel.sh
 # Trigger: PreToolUse on Write|Edit tools
-# Purpose: Check if the file being written is within the current wave's ownership.
-#          If outside ownership → exit 2 (BLOCK) and freeze.
+# Purpose: Check if the file being written is within the current wave's channel.
+#          If outside its channel → exit 2 (BLOCK) and freeze.
 #
 # Unlike SunForge (warn only), Riptide FREEZES on boundary violations.
 # Exit 0 = allow, Exit 2 = block
@@ -25,10 +25,10 @@ fi
 
 # Project directory
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-.}"
-MODULE_MAP="$PROJECT_DIR/docs/MODULE_MAP.md"
+CHANNELS="$PROJECT_DIR/docs/CHANNELS.md"
 
-# If MODULE_MAP.md doesn't exist, allow (not yet configured)
-if [ ! -f "$MODULE_MAP" ]; then
+# If CHANNELS.md doesn't exist, allow (not yet configured)
+if [ ! -f "$CHANNELS" ]; then
   exit 0
 fi
 
@@ -47,7 +47,7 @@ if [ -z "$CURRENT_WAVE" ]; then
   exit 0
 fi
 
-# Parse MODULE_MAP.md to find the current wave's owned globs
+# Parse CHANNELS.md to find the current wave's owned globs
 # Format expected:
 #   ### Wave A: name
 #   **Owns**:
@@ -75,7 +75,7 @@ while IFS= read -r line; do
       OWNED_GLOBS+=("$GLOB")
     fi
   fi
-done < "$MODULE_MAP"
+done < "$CHANNELS"
 
 # If no globs found for this wave, allow (might be misconfigured)
 if [ ${#OWNED_GLOBS[@]} -eq 0 ]; then
@@ -94,17 +94,17 @@ for GLOB in "${OWNED_GLOBS[@]}"; do
   fi
 done
 
-# File is OUTSIDE the wave's ownership — FREEZE
+# File is OUTSIDE the wave's channel — FREEZE
 STATUS_FILE="$PROJECT_DIR/.riptide/status.json"
 if [ -f "$STATUS_FILE" ] && command -v jq &>/dev/null; then
-  TMP=$(jq --arg reason "Module boundary violation: $FILE_PATH is outside $CURRENT_WAVE ownership" \
+  TMP=$(jq --arg reason "Crossed channels: $FILE_PATH is outside $CURRENT_WAVE channel" \
     '.frozen += [{"reason": $reason, "timestamp": now | tostring}]' "$STATUS_FILE" 2>/dev/null)
   if [ -n "$TMP" ]; then
     echo "$TMP" > "$STATUS_FILE"
   fi
 fi
 
-echo "BLOCKED: File '$FILE_PATH' is outside wave '$CURRENT_WAVE' ownership boundary." >&2
-echo "Owned globs: ${OWNED_GLOBS[*]}" >&2
-echo "FROZEN: Module boundary violation. Reassign file ownership or restructure tides." >&2
+echo "CROSSED CHANNELS: '$FILE_PATH' is outside wave '$CURRENT_WAVE' channel." >&2
+echo "This wave's channel: ${OWNED_GLOBS[*]}" >&2
+echo "FROZEN: Crossed channels. Reassign ownership in docs/CHANNELS.md or restructure waves." >&2
 exit 2

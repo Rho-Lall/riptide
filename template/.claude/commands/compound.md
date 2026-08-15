@@ -19,7 +19,7 @@ Capture learnings from a completed task into `docs/solutions/`.
 
 ### 1. Review What Was Built
 
-If task ID provided, read `.riptide/plans/{task-id}.md` and the git diff for that task's commits.
+If task ID provided, read `.riptide/plans/{wave-id}.md` and the git diff for that task's commits.
 
 If no task ID, examine the most recent commits:
 ```bash

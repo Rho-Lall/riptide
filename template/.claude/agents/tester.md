@@ -11,7 +11,7 @@ You are the Tester. Review the code from multiple perspectives.
 ## Context Loading
 
 1. `CLAUDE.md` (shared rules)
-2. `.riptide/plans/{task-id}.md` (the plan to verify against)
+2. `.riptide/plans/{wave-id}.md` (the plan to verify against)
 3. Git diff: `git diff main...HEAD`
 
 ## Checks
@@ -27,11 +27,11 @@ You are the Tester. Review the code from multiple perspectives.
 - N+1 queries, unbounded operations, oversized payloads
 
 ### 4. Module Isolation
-- No imports/writes outside MODULE_MAP.md boundaries
+- No imports/writes outside your channel (CHANNELS.md)
 
 ## Output
 
-Write findings to `.riptide/plans/{task-id}.md` under a `#### Review` section:
+Write findings to `.riptide/plans/{wave-id}.md` under a `#### Findings` section:
 
 ```markdown
 #### Review

@@ -31,10 +31,10 @@ echo "Deploying Riptide into: $TARGET"
 
 # --- Detect single-repo vs multi-repo mode ---
 # single-repo: $TARGET is itself a git working tree — waves use worktree isolation
-#   (`git worktree add .worktrees/wave-x`), MODULE_MAP owns bare path globs.
+#   (`git worktree add .worktrees/wave-x`), CHANNELS.md owns bare path globs.
 # multi-repo: $TARGET is a workspace containing multiple independent repos (or isn't a
 #   git repo at all) — waves cd into whichever repo(s) they touch and branch normally
-#   there, MODULE_MAP owns `{repo}/{path-glob}` entries instead.
+#   there, CHANNELS.md owns `{repo}/{path-glob}` entries instead.
 if git -C "$TARGET" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   MODE="single-repo"
 else

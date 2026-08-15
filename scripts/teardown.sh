@@ -35,6 +35,14 @@ else
   echo "  - CLAUDE.md not found (skipped)"
 fi
 
+# --- Remove RIPTIDE.md ---
+if [ -f "$TARGET/RIPTIDE.md" ]; then
+  rm -f "$TARGET/RIPTIDE.md"
+  echo "  ✓ Removed RIPTIDE.md"
+else
+  echo "  - RIPTIDE.md not found (skipped)"
+fi
+
 # --- Remove .riptide/ directory ---
 if [ -d "$TARGET/.riptide" ]; then
   rm -rf "$TARGET/.riptide"
@@ -51,12 +59,20 @@ else
   echo "  - docs/TECH_SPEC.md not found (skipped)"
 fi
 
-# --- Remove docs/MODULE_MAP.md ---
-if [ -f "$TARGET/docs/MODULE_MAP.md" ]; then
-  rm -f "$TARGET/docs/MODULE_MAP.md"
-  echo "  ✓ Removed docs/MODULE_MAP.md"
+# --- Remove docs/BAR.md ---
+if [ -f "$TARGET/docs/BAR.md" ]; then
+  rm -f "$TARGET/docs/BAR.md"
+  echo "  ✓ Removed docs/BAR.md"
 else
-  echo "  - docs/MODULE_MAP.md not found (skipped)"
+  echo "  - docs/BAR.md not found (skipped)"
+fi
+
+# --- Remove docs/CHANNELS.md ---
+if [ -f "$TARGET/docs/CHANNELS.md" ]; then
+  rm -f "$TARGET/docs/CHANNELS.md"
+  echo "  ✓ Removed docs/CHANNELS.md"
+else
+  echo "  - docs/CHANNELS.md not found (skipped)"
 fi
 
 # --- Remove docs/solutions/ ---

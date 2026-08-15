@@ -16,8 +16,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/module-boundary.sh",
-            "statusMessage": "Checking module boundaries..."
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/cross-channel.sh",
+            "statusMessage": "Checking channels..."
           }
         ]
       }

@@ -16,15 +16,17 @@ Implement a task from its plan. Uses the **Builder** agent role.
 
 ### 1. Read Plan
 
-Read the plan from `.riptide/plans/{task-id}.md`. Parse:
+Read the wave's plan from `.riptide/plans/{wave-id}.md` — derive `{wave-id}` from the current
+branch (`feature/wave-a-billing` → `wave-a`). Find this ticket's section. Parse:
 - Files to create/modify
 - Service function signatures
 - Test cases
 - Verification commands
 
-If no plan exists, stop. Planning happens upfront via Claude's native Plan Mode (see the
-`plan-ticket` skill), not by an autonomous agent — there's no `/plan` command to fall back to.
-Tell the human this task hasn't been planned yet.
+If the plan is missing, or lacks an `**Approved**:` line, or has no section for this ticket:
+stop and tell the human. Planning happens via the `plan-ticket` skill in native Plan Mode with
+a human approving — there's no `/plan` command to fall back to, and you must never write the
+approval line yourself.
 
 ### 2. Update Status
 
@@ -71,12 +73,12 @@ Monitor these conditions throughout:
 On freeze:
 1. Stop ALL work immediately.
 2. Update `.riptide/status.json` with status `"frozen"` and reason.
-3. Write freeze details to `.riptide/plans/{task-id}.md`.
+3. Write freeze details to `.riptide/plans/{wave-id}.md`.
 4. Do NOT continue. Wait for human intervention.
 
 ## Rules
 
 - Follow the plan. Don't make architecture decisions.
-- Stay within your wave's module boundary (MODULE_MAP.md).
+- Stay in your wave's channel (CHANNELS.md).
 - Check `docs/solutions/` before implementing — reuse existing patterns.
 - Never force push. Never reset --hard.

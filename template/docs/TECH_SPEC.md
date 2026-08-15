@@ -1,6 +1,6 @@
 # TECH_SPEC
 
-<!-- Kiro fills this before waves start. Agents load it as context. -->
+<!-- Fill this in before waves start. Agents load it as context. -->
 
 ## Overview
 
