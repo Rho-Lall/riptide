@@ -1,8 +1,11 @@
 # CLAUDE.md
 
 ## Rules
+0. Check `.riptide/status.json`'s `mode` field (`single-repo` or `multi-repo`) before touching
+   MODULE_MAP.md — it tells you which wave format (worktree vs. repo-scoped) applies.
 1. Read task plan before starting work.
-2. Stay within module boundary (MODULE_MAP.md).
+2. Stay within module boundary (MODULE_MAP.md). In multi-repo mode, "boundary" includes the
+   repo, not just the path — a glob owned in `repo-a` says nothing about `repo-b`.
 3. Logic: test first. Declarative: write directly.
 4. Atomic commits, one concern each.
 5. 3 failures same test → FREEZE, update status, stop.
@@ -16,7 +19,9 @@
 CLAUDE.md → TECH_SPEC.md → MODULE_MAP.md → docs/solutions/ → .riptide/plans/{task-id}.md
 
 ## Roles
-/plan — read-only research, output to .riptide/plans/
+Planning happens upfront via Claude's native Plan Mode (see the `plan-ticket` skill) — there
+is no `/plan` command. A task must have an approved plan at .riptide/plans/{task-id}.md
+before /build runs.
 /build — implement from plan (TDD logic, direct declarative)
 /review — code review, findings to plan file
 /compound — capture patterns/gotchas
@@ -27,3 +32,11 @@ Types: feat|fix|test|refactor|docs|chore
 
 ## Status
 Write .riptide/status.json: start→planning/building/reviewing, done→complete, freeze→frozen+reason
+
+## Worktrees
+Ticket work happens in a git worktree at `.worktrees/{TICKET-ID}` relative to this repo's
+root, created by the orchestrator session (a separate Claude session with git ability — git
+actions are locked down here). If you're working on a specific ticket, `cd` into
+`.worktrees/{TICKET-ID}` first — don't work from the main checkout. If that worktree doesn't
+exist yet, tell the human/orchestrator to create one rather than attempting `git worktree`
+yourself.

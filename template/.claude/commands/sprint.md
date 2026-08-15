@@ -1,10 +1,14 @@
 ---
-description: Batch process tasks in serial order — plan/build/review/compound for each
+description: Batch process tasks in serial order — build/review/compound for each
 ---
 
 # /sprint
 
 Process multiple tasks in serial order. Runs the full pipeline for each task within a wave.
+
+Planning is NOT part of this pipeline — each task must already have an approved plan at
+`.riptide/plans/{task-id}.md` before `/sprint` runs, produced upfront via Claude's native Plan
+Mode (see the `plan-ticket` skill), not by an autonomous planning agent.
 
 ## Usage
 
@@ -20,10 +24,9 @@ Tasks are processed in the order given. Each task depends on the previous within
 
 ### For Each Task (in order):
 
-1. `/plan {TASK-ID}` — Research and write plan
-2. `/build {TASK-ID}` — Implement from plan
-3. `/review {TASK-ID}` — Self-review the implementation
-4. `/compound {TASK-ID}` — Capture learnings
+1. `/build {TASK-ID}` — Implement from plan (stops if no plan exists — see above)
+2. `/review {TASK-ID}` — Self-review the implementation
+3. `/compound {TASK-ID}` — Capture learnings
 
 Update `.riptide/status.json` at each transition.
 

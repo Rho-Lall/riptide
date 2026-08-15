@@ -22,7 +22,9 @@ Read the plan from `.riptide/plans/{task-id}.md`. Parse:
 - Test cases
 - Verification commands
 
-If no plan exists, stop and run `/plan {TASK-ID}` first.
+If no plan exists, stop. Planning happens upfront via Claude's native Plan Mode (see the
+`plan-ticket` skill), not by an autonomous agent — there's no `/plan` command to fall back to.
+Tell the human this task hasn't been planned yet.
 
 ### 2. Update Status
 
